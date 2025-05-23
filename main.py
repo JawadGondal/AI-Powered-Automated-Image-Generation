@@ -15,6 +15,9 @@ client = gspread.authorize(creds)
 sheet = client.open_by_url("your_googlesheet_url").sheet1
 rows = sheet.get_all_values()
 
+# In current sheet, there is only one background color, theme description, and style.
+# The following code block deals with that case.
+
 # --- Extract Style, color, and theme ---
 headers = rows[0]
 values = rows[1]
@@ -22,6 +25,15 @@ style = values[headers.index("Image Style")]
 bg_color = values[headers.index("Background Color")]
 theme = values[headers.index("Theme Description")]
 #print(len(headers),headers)
+
+# If you have unique value of background color, theme description, and style for each content title. Add following cole block in for loop
+
+"""
+    style = rows[i][headers.index("Imge Style")]  # Current sheet has column name image style. You can specify it according to your sheet.
+    bg_color = rows[i][headers.index("Background Color")] # Specify column name accorind to your sheet.
+    theme = rows[i][headers.index("Theme Description")]  # Specify column name according to your sheet.
+    # Add here if columns are more than current sheet.
+"""
 
 # --- Process each content title ---
 for i in range(1, len(rows)):
