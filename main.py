@@ -12,7 +12,7 @@ creds = ServiceAccountCredentials.from_json_keyfile_name("creds.json",scope)
 client = gspread.authorize(creds)
 
 # --- Load Google Sheet ---
-sheet = client.open_by_url("https://docs.google.com/spreadsheets/d/1UEti1_4FxzgR90Ns5zqgTi9aVJvCwgO7CVSzJU-HRmM/edit?usp=sharing").sheet1
+sheet = client.open_by_url("your_googlesheet_url").sheet1
 rows = sheet.get_all_values()
 
 # --- Extract Style, color, and theme ---
@@ -21,7 +21,7 @@ values = rows[1]
 style = values[headers.index("Image Style")]
 bg_color = values[headers.index("Background Color")]
 theme = values[headers.index("Theme Description")]
-print(len(headers),headers)
+#print(len(headers),headers)
 
 # --- Process each content title ---
 for i in range(1, len(rows)):
@@ -35,6 +35,9 @@ for i in range(1, len(rows)):
             n=1,
             quality='standard'
         )
+    # Insert Image link to sheet
+        image_url = response.data[0].url
+        sheet.update_cell(i+1, len(headers), image_url)
     except Exception as e:
         print("Error Generating Image", e)
 
